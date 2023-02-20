@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  web:
+    image: wordpress:apache
+    restart: always
+    volumes:
+      - webdata:/var/www/html
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: mariadb
+      WORDPRESS_DB_NAME: dockerbuch
+      WORDPRESS_DB_USER: dockerbuch
+      WORDPRESS_DB_PASSWORD: johroo2zaeQu
+
+  mariadb:
+    image: mariadb:10
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: eengi7suXeut
+      MYSQL_DATABASE: dockerbuch
+      MYSQL_USER: dockerbuch
+      MYSQL_PASSWORD: johroo2zaeQu
+
+volumes:
+  webdata:
+
+# docker-compose up -d
+# docker run --rm -t --volumes-from wordpress_web_1 --network wordpress_default wordpress:cli plugin update --all
+# 
+# Backup
+# docker run --rm -v /var/backups/wordpress:/backup --volumes-from=wordpress_web_1 alpine tar zcxf /backup/wordpress.tar.gz /var/www/html
+# docker-compose exec mariadb sh -c 'mysqldump --password=$MYSQL_ROOT_PASSWORD --single-transaction --skip-lock-tables dockerbuch' > /var/backups/dockerbuch-wordpress.sql
